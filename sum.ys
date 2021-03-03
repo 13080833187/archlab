@@ -1,0 +1,41 @@
+# Execution begins at address 0, written by Sizhe Li, 1900013061
+	.pos 0
+	irmovq stack, %rsp
+	call main
+	halt
+
+# Sample linked list
+.align 8
+ele1:
+	.quad 0x00a
+	.quad ele2
+ele2:
+	.quad 0x0b0
+	.quad ele3
+ele3:
+	.quad 0xc00
+	.quad 0
+
+# Main function
+main:
+	irmovq ele1, %rdi
+	call sum_list
+	ret
+
+# long sum_list
+sum_list:
+	irmovq $0, %rax
+	irmovq $0, %r8
+loop:
+	subq %r8, %rdi
+	jne L1
+	ret
+L1:
+	mrmovq (%rdi), %r9
+	mrmovq 8(%rdi), %rdi
+	addq %r9, %rax
+	jmp loop
+
+# Stack starts here and grows to lower addresses
+	.pos 0x200
+stack:
